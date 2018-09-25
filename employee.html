@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<link rel="stylesheet" href="styling.css" type="text/css">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    
+   var data ='[ {"ID" : "1", "name" : "Harry", "age" : "32", "email" : "harry@gmail.com"}, {"ID" : "2","name" : "Monika", "age" : "20", "email" : "Monika@gmail.com"},{"ID" : "3","name" : "Rahul", "age" : "20", "email" : "Rahul@gmail.com"},{"ID" : "4","name" : "Prem", "age" : "30", "email" : "Prem@gmail.com"},{"ID" : "4","name" : "Raj", "age" : "22", "email" : "Raj@gmail.com"} ]';
+   $(document).ready(function(){
+   var jsondata = JSON.parse(data); 
+       console.log(jsondata);
+    for(var i = 0; i <jsondata.length;  i++) {
+    var temp = '<tr><td>' + jsondata[i].ID + '</td>';
+    temp+= '<td>' + jsondata[i].name+ '</td>';
+    temp+= '<td>' + jsondata[i].age + '</td>';
+    temp+= '<td>' + jsondata[i].email + '</td></tr>';
+    $('#myTable').append(temp);
+    }
+
+
+    $("#searchItem").keyup(function () {
+    var txtVal = $(this).val();
+    if (txtVal != "") {
+        $(".tblDetails").show();
+        $(".message").hide();
+        $.each($('.tblDetails'), function () {
+            var match = $("td:contains-ci('" + txtVal + "')", this);
+            match.parent().siblings().hide();                      
+            if (match.length > 0) $(match).parent("tr").show();
+            else $(this).hide();
+        });
+    } else {
+        
+        $("tbody > tr", this).show();
+    }
+    if($('.tblDetails:visible').length == 0)
+    {
+        $('#search').after('<p class="message">Sorry No results found!!!</p>');
+    }
+});
+
+
+$.extend($.expr[":"], {
+    "contains-ci": function (elem, i, match, array) {
+        return (elem.textContent || elem.innerText || $(elem).text() || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+    }
+});
+});
+
+</script>
+
+<body >
+
+<h2>Basic HTML Table</h2>
+<input type="text" id="searchItem" placeholder="search.."/>   
+<table class="tblDetails">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th> 
+    <th>Age</th>
+    <th>email</th>
+  </tr>
+</thead>
+<tbody id="myTable">
+  
+</tbody>
+</table>
+
+</body>
+</html>
